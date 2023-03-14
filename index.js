@@ -142,25 +142,32 @@ setInterval(() => {
 
 
 app.get("/", (req, res) => {
+  function format_number(num) {
+    if (num !== undefined) {
+      return num.toFixed(3);
+    }
+    return '';
+  }
+  
   res.send(`
     <h1>Token List</h1>
     <table>
       <tr>
         <th>Symbol</th>
-        <th>BSC/Gate Bid Ratio</th>
-        <th>Gate/BSC Ask Ratio</th>
-        <th>Jup/Gate Ask Ratio</th>
-        <th>Gate/Jup Ask Ratio</th>
+        <th>BSC/Huobi Bid Ratio</th>
+        <th>Huobi/BSC Ask Ratio</th>
+        <th>Jup/Huobi Ask Ratio</th>
+        <th>Huobi/Jup Ask Ratio</th>
       </tr>
       ${tokens.map(token => {
-        if (token.al_dex < 0.98 || token.sat_dex > 1.02 || token.sat_jup > 1.01 || token.al_jup < 0.99) {
+        if (token.al_dex < 0.99 || token.sat_dex > 1.01 || token.sat_jup > 1.01 || token.al_jup < 0.99) {
           return `
             <tr>
               <td>${token.symbol}</td>
-              <td style="color:${token.al_dex < 0.95 ? 'green' : 'inherit'}">${token.al_dex < 0.98 ? token.al_dex : ''}</td>
-              <td style="color:${token.sat_dex > 1.05 ? 'red' : 'inherit'}">${token.sat_dex > 1.02 ? token.sat_dex : ''}</td>
-              <td style="color:${token.al_jup < 0.95 ? 'green' : 'inherit'}">${token.al_jup < 0.99 ? token.al_jup : ''}</td>
-              <td style="color:${token.sat_jup > 1.05 ? 'red' : 'inherit'}">${token.sat_jup > 1.01 ? token.sat_jup : ''}</td>
+              <td style="color:${token.al_dex < 0.95 ? 'green' : 'inherit'}">${format_number(token.al_dex) < 0.99 ? format_number(token.al_dex) : ''}</td>
+              <td style="color:${token.sat_dex > 1.05 ? 'red' : 'inherit'}">${format_number(token.sat_dex) > 1.01 ? format_number(token.sat_dex) : ''}</td>
+              <td style="color:${token.al_jup < 0.95 ? 'green' : 'inherit'}">${format_number(token.al_jup) < 0.99 ? format_number(token.al_jup) : ''}</td>
+              <td style="color:${token.sat_jup > 1.05 ? 'red' : 'inherit'}">${format_number(token.sat_jup) > 1.01 ? format_number(token.sat_jup) : ''}</td>
             </tr>
           `;
         }
